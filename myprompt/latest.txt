@@ -7,9 +7,10 @@ Please follow these requirements strictly:
   "Key point:", or "In conclusion:".
 * Also, do not include any references, citations, or source attributions.
 * Please do not use the original article title.
-* A maximum of 3 beats can omit the `"image": { "type": "beat" }"` field.
-* All other beats must include this field.
-* Count the beats without `"image"` and ensure the number does not exceed 3.
+* Please do not include phrases that refer to the source article, such as “in the article” or “this article.”
+## A maximum of 3 beats can omit the `"image": { "type": "beat" }"` field.
+  * All other beats must include this field.
+  * Count the beats without `"image"` and ensure the number does not exceed 3.
 
 
 
@@ -30,10 +31,16 @@ Use the JSON below as a template.
             "type": "[SOURCE_TYPE: article, paper]"
         }
     ],
-    "summary": "[Please describe the video in Japanese.]"
+    "summary": "[I am planning to create a video. Please mention in Japanese what you would like to explain. Start with the phrase “この動画では、”]"
     "beats": [
         {
-            "text": "[OPENING_BEAT: Introduce the topic with a hook. Reference the source material and set up why this topic matters. Usually 2-3 sentences that grab attention and provide context.]"
+            "text": "[OPENING_BEAT_1: Introduce the topic with a hook. Reference the source material and set up why this topic matters. Usually 2 sentences that grab attention and provide context.]"
+        },
+        {
+            "text": "[OPENING_BEAT_2: If OPENING_BEAT is 3 or more sentences, introduce the rest in OPENING_BEAT_2.]"
+            "image": {
+                "type": "beat"
+            }
         },
         {
             "text": "[MAIN_CONCEPT: Define or explain the core concept/idea. This should be the central focus of your narrative. Keep it clear and accessible.]"
