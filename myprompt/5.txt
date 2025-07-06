@@ -1,0 +1,27 @@
+{
+  "$mulmocast": {
+    "version": "1.0",
+    "credit": "closing"
+  },
+  "title": "The Bitcoin Whale Awakens",
+  "lang": "en",
+  "references": [
+    {
+      "url": "https://www.coindeskjapan.com/301943/",
+      "title": "ビットコインのクジラが14年間の眠りから目覚め、20億ドル以上のBTCを移動",
+      "type": "article"
+    }
+  ],
+  "summary": "14年間眠っていたビットコインの巨大保有者（クジラ）が突如活動を再開。取得時の価格からおよそ14万倍に膨れ上がった2万BTCが動かされ、仮想通貨市場に緊張感が走る。だが、売却ではない可能性も？この動きの意味と今後の注目点を分かりやすく解説します。",
+  "beats": [
+    {
+      "text": "After 14 years of total silence, a mysterious Bitcoin whale has suddenly stirred. In early July 2025, two dormant wallets holding over 20,000 BTC—worth around $2 billion—moved their coins for the first time since 2011. The blockchain world instantly took notice."
+    },
+    {
+      "text": "These wallets originally acquired their Bitcoin when it was priced at just $0.78. Fast forward to today, and that same stash has ballooned into a multi-billion dollar fortune—without a single sale in all those years.",
+      "image": {
+        "type": "beat"
+      }
+    }
+  ]
+}

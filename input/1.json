@@ -1,0 +1,38 @@
+{
+    "$mulmocast": {
+        "version": "1.0",
+        "credit": "closing"
+    },
+    "title": "Bitcoin Whale Awakens After 14 Years",
+    "lang": "en",
+    "references": [
+        {
+            "url": "https://www.coindeskjapan.com/301943/",
+            "title": "14年ぶりに動いたビットコインクジラ、2万BTCを新ウォレットに送金",
+            "type": "article"
+        }
+    ],
+    "beats": [
+        {
+            "text": "Imagine waking up to find a long-lost treasure chest suddenly opened after 14 years. That’s exactly what happened in the crypto world when a dormant Bitcoin whale moved 20,000 BTC — worth over $2 billion — to a new wallet. [Source: CoinDesk Japan]"
+        },
+        {
+            "text": "A Bitcoin whale refers to an individual or entity that holds a large amount of Bitcoin. These players can significantly impact the market due to the sheer volume of their holdings."
+        },
+        {
+            "text": "In this case, the whale had been inactive since April 2011, when Bitcoin was just 78 cents per coin. The 20,000 BTC moved now is worth over $2 billion — a jaw-dropping 14,000x return on investment."
+        },
+        {
+            "text": "Interestingly, the coins weren’t sent to an exchange but to a new wallet address, which suggests the move might not be a sell-off — but it still raises eyebrows across the industry."
+        },
+        {
+            "text": "Experts speculate this could be a security update, a form of asset rebalancing, or even preparation for future estate transfers. But any time such large amounts move, traders and analysts watch closely."
+        },
+        {
+            "text": "Market psychology plays a big role. When whales shift massive amounts, fear of a dump — or hope for a rally — can trigger knee-jerk reactions across the ecosystem."
+        },
+        {
+            "text": "Ultimately, this event reminds us of Bitcoin’s incredible journey and how a single early believer’s quiet wallet can still shake modern markets. Whether it's a sell-off or not, it's a powerful symbol of crypto’s evolving history."
+        }
+    ]
+}
