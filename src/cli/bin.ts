@@ -10,6 +10,7 @@ import * as translateCmd from "./commands/translate/index.js";
 import * as audioCmd from "./commands/audio/index.js";
 import * as imagesCmd from "./commands/image/index.js";
 import * as movieCmd from "./commands/movie/index.js";
+import * as youtubeCmd from "./commands/youtube/index.js";
 import * as pdfCmd from "./commands/pdf/index.js";
 import * as toolCmd from "./commands/tool/index.js";
 import { GraphAILogger } from "graphai";
@@ -34,6 +35,7 @@ export const main = async () => {
     .command(audioCmd)
     .command(imagesCmd)
     .command(movieCmd)
+    .command(youtubeCmd)
     .command(pdfCmd)
     .command(toolCmd)
     .demandCommand()

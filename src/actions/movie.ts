@@ -230,4 +230,5 @@ export const movie = async (context: MulmoStudioContext) => {
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "video", false);
   }
+  return context;
 };
