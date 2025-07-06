@@ -2,7 +2,7 @@ import type { Argv } from "yargs";
 import { commonOptions } from "../../common.js";
 import { languages } from "../../../utils/const.js";
 
-export const builder = (yargs: Argv) => {
+export const builder = (yargs: Argv) =>
   commonOptions(yargs)
     .option("a", {
       alias: "audiodir",
@@ -20,4 +20,3 @@ export const builder = (yargs: Argv) => {
       choices: languages,
       type: "string",
     });
-};
