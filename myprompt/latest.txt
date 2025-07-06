@@ -8,9 +8,6 @@ Please follow these requirements strictly:
 * Also, do not include any references, citations, or source attributions.
 * Please do not use the original article title.
 * Please do not include phrases that refer to the source article, such as “in the article” or “this article.”
-## A maximum of 3 beats can omit the `"image": { "type": "beat" }"` field.
-  * All other beats must include this field.
-  * Count the beats without `"image"` and ensure the number does not exceed 3.
 
 
 
