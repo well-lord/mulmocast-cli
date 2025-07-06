@@ -82,6 +82,16 @@ brew install ffmpeg
 # Visit https://ffmpeg.org/download.html
 ```
 
+You can also use [`Dockerfile`](./Dockerfile) which helps you install the pre-requisits.
+```
+docker build -t mulmo-cli .
+```
+
+You can use the Docker image like this:
+```
+docker run -e OPENAI_API_KEY=<your_openai_api_key> -it mulmo-cli mulmo tool scripting -i -t children_book -o ./ -s story
+```
+
 ## Configuration
 
 Create a `.env` file in your project directory with the following API keys:
@@ -102,6 +112,19 @@ GOOGLE_PROJECT_ID=your_google_project_id
 ```
 
 See also [pre-requisites for Google's image generation model](./docs/pre-requisites-google.md)
+
+#### (Optional) For AI providers
+```bash
+# For Anthropic Claude (htmlPrompt feature)
+ANTHROPIC_API_TOKEN=your_anthropic_api_token
+```
+
+For htmlPrompt configuration, see [docs/image.md](./docs/image.md#2-htmlprompt).
+
+#### (Optional) For Movie models
+```bash
+REPLICATE_API_TOKEN=your_replicate_api_key
+```
 
 #### (Optional) For TTS models
 ```bash
@@ -160,7 +183,7 @@ DEFAULT_OPENAI_IMAGE_MODEL=gpt-image-1 # required for high-quality Ghibli-style 
 
 ### Step 2: Generate a Ghibli-style MulmoScript
 ```bash
-mulmo tool scripting -i -t ghibli_strips -o ./ -s story
+mulmo tool scripting -i -t ghibli_comic -o ./ -s story
 ```
 This will initiate an interactive conversation with the AI to create your Ghibli-inspired story. Once completed, a JSON file (e.g., `story-1747834931950.json`) will be generated.
 
@@ -187,11 +210,18 @@ writing: /Users/username/path/to/output/story-1747834931950__ja.mp4
 # Generate script from web content (requires Browserless API KEY)
 mulmo tool scripting -u https://example.com
 
+# Generate script from local file
+mulmo tool scripting --input-file story.txt
+
 # Generate script with interactive mode
 mulmo tool scripting -i
 ```
 
-When using the `⁠sensei_and_taro` template, a Nijivoice API key is required.
+Note: 
+- When using the `⁠sensei_and_taro` template, a Nijivoice API key is required
+- When -i is specified, --input-file value will be ignored
+- When --input-file is specified, -u value will be ignored
+
 
 ## Generate content from MulmoScript
 
@@ -288,14 +318,15 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -a, --audiodir  Audio output directory                                [string]
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -a, --audiodir           Audio output directory                       [string]
 ```
 
 ```
@@ -307,14 +338,15 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -i, --imagedir  Image output directory                                [string]
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -i, --imagedir           Image output directory                       [string]
 ```
 
 ```
@@ -326,16 +358,17 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -a, --audiodir  Audio output directory                                [string]
-  -i, --imagedir  Image output directory                                [string]
-  -c, --caption   Video captions                  [string] [choices: "en", "ja"]
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -a, --audiodir           Audio output directory                       [string]
+  -i, --imagedir           Image output directory                       [string]
+  -c, --caption            Video captions         [string] [choices: "en", "ja"]
 ```
 
 ```
@@ -347,17 +380,19 @@ Positionals:
   file  Mulmo Script File                                    [string] [required]
 
 Options:
-      --version   Show version number                                  [boolean]
-  -v, --verbose   verbose log              [boolean] [required] [default: false]
-  -h, --help      Show help                                            [boolean]
-  -o, --outdir    output dir                                            [string]
-  -b, --basedir   base dir                                              [string]
-  -l, --lang      target language                 [string] [choices: "en", "ja"]
-  -f, --force     Force regenerate                    [boolean] [default: false]
-  -i, --imagedir  Image output directory                                [string]
-      --pdf_mode  PDF mode
+      --version            Show version number                         [boolean]
+  -v, --verbose            verbose log     [boolean] [required] [default: false]
+  -h, --help               Show help                                   [boolean]
+  -o, --outdir             output dir                                   [string]
+  -b, --basedir            base dir                                     [string]
+  -l, --lang               target language        [string] [choices: "en", "ja"]
+  -f, --force              Force regenerate           [boolean] [default: false]
+      --dryRun             Dry run                    [boolean] [default: false]
+  -p, --presentationStyle  Presentation Style                           [string]
+  -i, --imagedir           Image output directory                       [string]
+      --pdf_mode           PDF mode
                [string] [choices: "slide", "talk", "handout"] [default: "slide"]
-      --pdf_size  PDF paper size (default: letter)
+      --pdf_size           PDF paper size (default: letter)
                                    [choices: "letter", "a4"] [default: "letter"]
 ```
 
@@ -390,16 +425,19 @@ Options:
   -b, --basedir      base dir                                           [string]
   -u, --url          URLs to reference (required when not in interactive mode)
                                                            [array] [default: []]
+      --input-file   input file name                                    [string]
   -i, --interactive  Generate script in interactive mode with user prompts
                                                                        [boolean]
   -t, --template     Template name to use
-       [string] [choices: "business", "children_book", "coding", "comic_strips",
-                         "ghibli_strips", "podcast_standard", "sensei_and_taro"]
+        [string] [choices: "akira_comic", "business", "children_book", "coding",
+           "comic_strips", "drslump_comic", "ghibli_comic", "ghibli_image_only",
+           "ghibli_shorts", "ghost_comic", "onepiece_comic", "podcast_standard",
+               "portrait_movie", "realistic_movie", "sensei_and_taro", "shorts",
+                                       "text_and_image", "text_only", "trailer"]
   -c, --cache        cache dir                                          [string]
   -s, --script       script filename                [string] [default: "script"]
       --llm          llm
-              [string] [choices: "openAIAgent", "anthropicAgent", "geminiAgent",
-                                                                    "groqAgent"]
+                     [string] [choices: "openai", "anthropic", "gemini", "groq"]
       --llm_model    llm model                                          [string]
 ```
 

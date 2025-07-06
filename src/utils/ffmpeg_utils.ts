@@ -7,6 +7,14 @@ export type FfmpegContext = {
   filterComplex: string[];
 };
 
+export const setFfmpegPath = (ffmpegPath: string) => {
+  ffmpeg.setFfmpegPath(ffmpegPath!);
+};
+
+export const setFfprobePath = (ffprobePath: string) => {
+  ffmpeg.setFfprobePath(ffprobePath!);
+};
+
 export const FfmpegContextInit = (): FfmpegContext => {
   return {
     command: ffmpeg(),
@@ -15,8 +23,12 @@ export const FfmpegContextInit = (): FfmpegContext => {
   };
 };
 
-export const FfmpegContextAddInput = (context: FfmpegContext, input: string) => {
-  context.command.input(input);
+export const FfmpegContextAddInput = (context: FfmpegContext, input: string, inputOptions?: string[]) => {
+  if (inputOptions) {
+    context.command.input(input).inputOptions(inputOptions);
+  } else {
+    context.command.input(input);
+  }
   context.inputCount++;
   return context.inputCount - 1; // returned the index of the input
 };
@@ -29,8 +41,8 @@ export const FfmpegContextPushFormattedAudio = (context: FfmpegContext, sourceId
   }
 };
 
-export const FfmpegContextInputFormattedAudio = (context: FfmpegContext, input: string, duration: number | undefined = undefined) => {
-  const index = FfmpegContextAddInput(context, input);
+export const FfmpegContextInputFormattedAudio = (context: FfmpegContext, input: string, duration: number | undefined = undefined, inputOptions?: string[]) => {
+  const index = FfmpegContextAddInput(context, input, inputOptions);
   const audioId = `[a${index}]`;
   FfmpegContextPushFormattedAudio(context, `[${index}:a]`, audioId, duration);
   return audioId;

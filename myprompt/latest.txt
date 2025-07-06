@@ -1,0 +1,64 @@
+Generate a script for a presentation of the given topic.
+Another AI will generate comic strips for each beat based on the text description of that beat.
+Mention the reference in one of beats, if it exists.
+
+Please follow these requirements strictly:
+* Do not include section headers or phrases like "The core story:",
+  "Key point:", or "In conclusion:".
+* Also, do not include any references, citations, or source attributions.
+* Please do not use the original article title.
+* A maximum of 3 beats can omit the `"image": { "type": "beat" }"` field.
+* All other beats must include this field.
+* Count the beats without `"image"` and ensure the number does not exceed 3.
+
+
+
+Use the JSON below as a template.
+
+```JSON
+{
+    "$mulmocast": {
+        "version": "1.0",
+        "credit": "closing"
+    },
+    "title": "[TITLE: Brief, engaging title for the topic]",
+    "lang": "en",
+    "references": [
+        {
+            "url": "[SOURCE_URL: URL of the source material]",
+            "title": "[SOURCE_TITLE: Title of the referenced article, or paper]",
+            "type": "[SOURCE_TYPE: article, paper]"
+        }
+    ],
+    "summary": "[Please describe the video in Japanese.]"
+    "beats": [
+        {
+            "text": "[OPENING_BEAT: Introduce the topic with a hook. Reference the source material and set up why this topic matters. Usually 2-3 sentences that grab attention and provide context.]"
+        },
+        {
+            "text": "[MAIN_CONCEPT: Define or explain the core concept/idea. This should be the central focus of your narrative. Keep it clear and accessible.]"
+            "image": {
+                "type": "beat"
+            }
+        },
+        {
+            "text": "[SUPPORTING_DETAIL_1: Additional context, examples, or elaboration that helps illustrate the main concept. This could include how it works, why it's important, or real-world applications.]"
+        },
+        {
+            "text": "[SUPPORTING_DETAIL_2: Continue with more examples, deeper explanation, or different aspects of the topic if needed.]"
+            "image": {
+                "type": "beat"
+            }
+        },
+        {
+            "text": "[ADDITIONAL_BEATS: Add more beats as necessary to fully explore the topic. Complex topics may require 6-10+ beats to cover adequately. Each beat should advance the narrative or provide valuable information.]"
+            "image": {
+                "type": "beat"
+            }
+        },
+        {
+            "text": "[CONCLUSION/IMPACT: Wrap up with the significance, implications, or key takeaway. Help the audience understand why this matters to them.]"
+        }
+    ]
+}
+```

@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { userAssert, llmConfig } from "../utils/utils.js";
 import {
   MulmoCanvasDimension,
   MulmoBeat,
@@ -6,11 +7,14 @@ import {
   MulmoImageParams,
   Text2SpeechProvider,
   Text2ImageAgentInfo,
+  Text2HtmlAgentInfo,
   BeatMediaType,
   MulmoPresentationStyle,
   SpeakerData,
+  Text2ImageProvider,
 } from "../types/index.js";
-import { text2ImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
+import { text2ImageProviderSchema, text2HtmlImageProviderSchema, text2SpeechProviderSchema, mulmoCanvasDimensionSchema } from "../types/schema.js";
+import { defaultOpenAIImageModel } from "../utils/const.js";
 
 const defaultTextSlideStyles = [
   '*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}',
@@ -56,7 +60,11 @@ export const MulmoPresentationStyleMethods = {
     return { ...presentationStyle.speechParams.speakers[beat.speaker].speechOptions, ...beat.speechOptions };
   },
   getSpeaker(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): SpeakerData {
-    return presentationStyle.speechParams.speakers[beat.speaker];
+    userAssert(!!presentationStyle?.speechParams?.speakers, "presentationStyle.speechParams.speakers is not set!!");
+    userAssert(!!beat?.speaker, "beat.speaker is not set");
+    const speaker = presentationStyle.speechParams.speakers[beat.speaker];
+    userAssert(!!speaker, `speaker is not set: speaker "${beat.speaker}"`);
+    return speaker;
   },
   getProvider(presentationStyle: MulmoPresentationStyle, beat: MulmoBeat): Text2SpeechProvider {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
@@ -66,17 +74,33 @@ export const MulmoPresentationStyleMethods = {
     const speaker = MulmoPresentationStyleMethods.getSpeaker(presentationStyle, beat);
     return speaker.voiceId;
   },
-  getImageAgentInfo(presentationStyle: MulmoPresentationStyle, dryRun: boolean = false): Text2ImageAgentInfo {
+  getText2ImageProvider(provider: Text2ImageProvider | undefined): Text2ImageProvider {
+    return text2ImageProviderSchema.parse(provider);
+  },
+  getImageAgentInfo(presentationStyle: MulmoPresentationStyle, beat?: MulmoBeat): Text2ImageAgentInfo {
     // Notice that we copy imageParams from presentationStyle and update
     // provider and model appropriately.
-    const provider = text2ImageProviderSchema.parse(presentationStyle.imageParams?.provider);
+    const imageParams = { ...presentationStyle.imageParams, ...beat?.imageParams };
+    const provider = MulmoPresentationStyleMethods.getText2ImageProvider(imageParams?.provider);
     const defaultImageParams: MulmoImageParams = {
-      model: provider === "openai" ? process.env.DEFAULT_OPENAI_IMAGE_MODEL : undefined,
+      provider,
+      model: provider === "openai" ? (process.env.DEFAULT_OPENAI_IMAGE_MODEL ?? defaultOpenAIImageModel) : undefined,
     };
     return {
+      agent: provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
+      imageParams: { ...defaultImageParams, ...imageParams },
+    };
+  },
+  getHtmlImageAgentInfo(presentationStyle: MulmoPresentationStyle): Text2HtmlAgentInfo {
+    const provider = text2HtmlImageProviderSchema.parse(presentationStyle.htmlImageParams?.provider);
+    const defaultConfig = llmConfig[provider];
+    const model = presentationStyle.htmlImageParams?.model ? presentationStyle.htmlImageParams?.model : defaultConfig.defaultModel;
+
+    return {
       provider,
-      agent: dryRun ? "mediaMockAgent" : provider === "google" ? "imageGoogleAgent" : "imageOpenaiAgent",
-      imageParams: { ...defaultImageParams, ...presentationStyle.imageParams },
+      agent: defaultConfig.agent,
+      model,
+      max_tokens: defaultConfig.max_tokens,
     };
   },
   getImageType(_: MulmoPresentationStyle, beat: MulmoBeat): BeatMediaType {

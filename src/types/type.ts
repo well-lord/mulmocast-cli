@@ -12,6 +12,7 @@ import {
   speakerDictionarySchema,
   mulmoImageParamsSchema,
   mulmoImageParamsImagesSchema,
+  mulmoFillOptionSchema,
   mulmoMovieParamsSchema,
   mulmoSpeechParamsSchema,
   textSlideParamsSchema,
@@ -21,6 +22,7 @@ import {
   mulmoScriptTemplateSchema,
   mulmoScriptTemplateFileSchema,
   text2ImageProviderSchema,
+  text2HtmlImageProviderSchema,
   text2MovieProviderSchema,
   text2SpeechProviderSchema,
   mulmoPresentationStyleSchema,
@@ -33,6 +35,8 @@ import {
   mulmoChartMediaSchema,
   mediaSourceSchema,
   mulmoSessionStateSchema,
+  mulmoOpenAIImageModelSchema,
+  mulmoGoogleImageModelSchema,
 } from "./schema.js";
 import { pdf_modes, pdf_sizes, storyToScriptGenerateMode } from "../utils/const.js";
 import { LLM } from "../utils/utils.js";
@@ -47,8 +51,10 @@ export type SpeechOptions = z.infer<typeof speechOptionsSchema>;
 export type SpeakerData = z.infer<typeof speakerDataSchema>;
 export type MulmoImageParams = z.infer<typeof mulmoImageParamsSchema>;
 export type MulmoImageParamsImages = z.infer<typeof mulmoImageParamsImagesSchema>;
+export type MulmoFillOption = z.infer<typeof mulmoFillOptionSchema>;
 export type TextSlideParams = z.infer<typeof textSlideParamsSchema>;
 export type Text2ImageProvider = z.infer<typeof text2ImageProviderSchema>;
+export type Text2HtmlImageProvider = z.infer<typeof text2HtmlImageProviderSchema>;
 export type Text2MovieProvider = z.infer<typeof text2MovieProviderSchema>;
 export type Text2SpeechProvider = z.infer<typeof text2SpeechProviderSchema>;
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
@@ -66,6 +72,8 @@ export type MulmoStudioMultiLingual = z.infer<typeof mulmoStudioMultiLingualSche
 export type MulmoStudioMultiLingualData = z.infer<typeof mulmoStudioMultiLingualDataSchema>;
 export type MultiLingualTexts = z.infer<typeof multiLingualTextsSchema>;
 export type MulmoMovieParams = z.infer<typeof mulmoMovieParamsSchema>;
+export type MulmoOpenAIImageModel = z.infer<typeof mulmoOpenAIImageModelSchema>;
+export type MulmoGoogleImageModel = z.infer<typeof mulmoGoogleImageModelSchema>;
 
 // images
 export type MulmoTextSlideMedia = z.infer<typeof mulmoTextSlideMediaSchema>;
@@ -90,9 +98,7 @@ export type MulmoStudioContext = {
   fileDirs: FileDirs;
   studio: MulmoStudio;
   lang?: string;
-  dryRun?: boolean;
   force: boolean;
-  caption?: string;
   sessionState: MulmoSessionState;
   presentationStyle: MulmoPresentationStyle;
   multiLingual: MulmoStudioMultiLingual;
@@ -106,6 +112,7 @@ export type ScriptingParams = {
   filename: string;
   llm_model?: string;
   llm?: LLM;
+  verbose?: boolean;
 };
 
 export type ImageProcessorParams = {
@@ -120,11 +127,52 @@ export type PDFMode = (typeof pdf_modes)[number];
 export type PDFSize = (typeof pdf_sizes)[number];
 
 export type Text2ImageAgentInfo = {
-  provider: Text2ImageProvider;
   agent: string;
   imageParams: MulmoImageParams;
+};
+
+export type Text2HtmlAgentInfo = {
+  provider: Text2HtmlImageProvider;
+  agent: string;
+  model: string;
+  max_tokens: number;
 };
 
 export type BeatMediaType = "movie" | "image";
 
 export type StoryToScriptGenerateMode = (typeof storyToScriptGenerateMode)[keyof typeof storyToScriptGenerateMode];
+
+export type SessionType = "audio" | "image" | "video" | "multiLingual" | "caption" | "pdf";
+export type BeatSessionType = "audio" | "image" | "multiLingual" | "caption" | "movie";
+
+export type SessionProgressEvent =
+  | { kind: "session"; sessionType: SessionType; inSession: boolean }
+  | { kind: "beat"; sessionType: BeatSessionType; index: number; inSession: boolean };
+
+export type SessionProgressCallback = (change: SessionProgressEvent) => void;
+
+export interface FileObject {
+  baseDirPath: string;
+  mulmoFilePath: string;
+  mulmoFileDirPath: string;
+  outDirPath: string;
+  imageDirPath: string;
+  audioDirPath: string;
+  isHttpPath: boolean;
+  fileOrUrl: string;
+  outputStudioFilePath: string;
+  outputMultilingualFilePath: string;
+  presentationStylePath: string | undefined;
+  fileName: string;
+}
+
+export type InitOptions = {
+  b?: string;
+  o?: string;
+  i?: string;
+  a?: string;
+  file?: string;
+  l?: string;
+  c?: string;
+  p?: string;
+};

@@ -122,6 +122,10 @@ export const getReferenceImagePath = (context: MulmoStudioContext, key: string, 
   const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
   return `${imageProjectDirPath}/${key}.${extension}`;
 };
+export const getCaptionImagePath = (context: MulmoStudioContext, index: number) => {
+  const imageProjectDirPath = MulmoStudioContextMethods.getImageProjectDirPath(context);
+  return `${imageProjectDirPath}/${index}_caption.png`;
+};
 
 // pdf
 export const getOutputPdfFilePath = (outDirPath: string, fileName: string, pdfMode: PDFMode, lang?: string) => {
@@ -222,4 +226,10 @@ export const readAndParseJson = <S extends ZodSchema<any>>(filePath: string, sch
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const json = JSON.parse(fileContent);
   return schema.parse(json);
+};
+
+export const generateTimestampedFileName = (prefix: string) => {
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${prefix}_${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
 };

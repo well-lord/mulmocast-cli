@@ -97,3 +97,83 @@ mulmo movie your_script.json -l ja -c ja
 
 - **音声生成**: `multiLingualTexts.ja.text`
 - **字幕生成**: `multiLingualTexts.ja.text`
+
+## プレゼンテーションスタイル
+
+### Q: `-p` オプションでプレゼンテーションスタイルを使うにはどうすればよいですか？
+
+**A: `-p` オプションはスタイルJSONファイルへのファイルパスを受け取ります。サンプルをダウンロードするか、独自のスタイルを作成できます。**
+
+**スタイルファイルの入手方法**:
+- [GitHub](https://github.com/receptron/mulmocast-cli/tree/main/assets/styles)からサンプルスタイルをダウンロード
+- 独自のカスタムスタイルJSONファイルを作成
+
+**使用例**:
+```bash
+# ダウンロードしたスタイル
+mulmo movie script.json -p ./downloaded-styles/ghibli_style.json
+
+# プロジェクト固有のスタイル
+mulmo movie script.json -p ./my-project/custom-style.json
+
+# ユーザー共通スタイル
+mulmo movie script.json -p ~/.mulmocast/styles/my-style.json
+```
+
+**注意**: `npm install -g mulmocast`でインストールした場合、スタイルファイルは含まれません。別途ダウンロードするか、独自に作成する必要があります。
+
+## 音声（TTS）設定
+
+### Q: TTSエンジンを変更するにはどうすればよいですか？
+
+**A: TTSプロバイダーは2つの方法で指定できます。**
+
+#### 方法1: 全体でTTSプロバイダーを指定
+```json
+{
+  "speechParams": {
+    "provider": "elevenlabs",
+    "speakers": {
+      "narrator": {
+        "voiceId": "your-voice-id"
+      }
+    }
+  }
+}
+```
+
+**参考**: [test_voices.json](https://github.com/receptron/mulmocast-cli/blob/main/scripts/test/test_voices.json#L7) で具体的な設定例を確認できます。
+
+#### 方法2: スピーカーごとにTTSプロバイダーを指定
+```json
+{
+  "speechParams": {
+    "provider": "openai",
+    "speakers": {
+      "narrator": {
+        "provider": "elevenlabs",
+        "voiceId": "voice-id-1"
+      },
+      "assistant": {
+        "provider": "nijivoice", 
+        "voiceId": "voice-id-2"
+      }
+    }
+  }
+}
+```
+スピーカー別の設定が優先され、未指定の場合は全体設定が使用されます。
+
+**環境変数の設定**:
+各プロバイダーを使用する場合は、対応するAPIキーを`.env`ファイルに設定してください。利用可能なプロバイダーと詳細は[Configuration](../README.md#configuration)を参照してください。
+
+## トラブルシューティング
+
+### Q: 画像生成で429エラーが発生します
+```
+An unexpected error occurred: RateLimitError: 429 {"message":null,"type":"image_generation_user_error","param":null,"code":null}
+```
+
+**A: OpenAI APIのレート制限によるエラーです。快適にご利用いただくために、Tier 2以上のプランをおすすめします。**
+
+ChatGPT PlusとOpenAI APIは別サービスのため、APIご利用時は開発者向けプランへのアップグレードをご検討ください。詳細は[OpenAI Usage Tiers](https://platform.openai.com/docs/guides/rate-limits)をご参照ください。

@@ -3,9 +3,10 @@ import type { AgentFunction, AgentFunctionInfo } from "graphai";
 import OpenAI from "openai";
 import type { SpeechCreateParams } from "openai/resources/audio/speech";
 
-export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => {
+export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params, config }) => {
   const { text } = namedInputs;
-  const { apiKey, model, voice, suppressError, instructions } = params;
+  const { model, voice, suppressError, instructions } = params;
+  const { apiKey } = config ?? {};
   const openai = new OpenAI({ apiKey });
 
   try {
@@ -31,11 +32,12 @@ export const ttsOpenaiAgent: AgentFunction = async ({ namedInputs, params }) => 
     if (e && typeof e === "object" && "error" in e) {
       GraphAILogger.info("tts_openai_agent: ");
       GraphAILogger.info(e.error);
+      throw new Error("TTS OpenAI Error: " + JSON.stringify(e.error, null, 2));
     } else if (e instanceof Error) {
       GraphAILogger.info("tts_openai_agent: ");
       GraphAILogger.info(e.message);
+      throw new Error("TTS OpenAI Error: " + e.message);
     }
-    throw new Error("TTS OpenAI Error");
   }
 };
 
