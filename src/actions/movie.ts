@@ -314,7 +314,10 @@ export const movie = async (context: MulmoStudioContext) => {
     if (await createVideo(audioArtifactFilePath, outputVideoPath, context)) {
       writingMessage(outputVideoPath);
     }
+    // 動画ファイルパスを持っておく
+    context.fileDirs.movieFilePath = outputVideoPath;
   } finally {
     MulmoStudioContextMethods.setSessionState(context, "video", false);
   }
+  return context;
 };

@@ -91,6 +91,7 @@ export type FileDirs = {
   outDirPath: string;
   imageDirPath: string;
   audioDirPath: string;
+  movieFilePath: string;
 };
 
 export type MulmoStudioContext = {
